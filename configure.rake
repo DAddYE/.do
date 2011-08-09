@@ -26,7 +26,7 @@ namespace :configure do
     run "service sshd reload"
   end
 
-  desc "upgrade rubygems and install usefull gems"
+  desc "upgrade rubygems and install useful gems"
   task :gems => :ree do
     run "gem update --system" if yes?("Do you want to update rubygems?")
     run "gem install rake"
@@ -35,7 +35,7 @@ namespace :configure do
     run "ln -s /opt/ruby-enterprise/bin/bundle /usr/bin/bundle" unless exist?("/usr/bin/bundle")
   end
 
-  desc "install image magick checking the best choiche for your env"
+  desc "install image magick checking the best choice for your env"
   task :imagemagick do
     if exist?('/etc/redhat-release') && read('/etc/redhat-release') =~ /centos/i
       run "yum install libjpeg-devel libpng-devel glib2-devel fontconfig-devel zlib-devel ghostscript-fonts libwmf-devel freetype-devel libtiff-devel -y"

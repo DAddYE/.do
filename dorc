@@ -1,18 +1,15 @@
-keys = %w(/Developer/src/LipsiaSoft/lipsiahosting/lib/lipsiarec/recipes/servers/resources/keys/Lipsiasoft.pem)
+##
+# Server definitions
+#
+# keys = %w(/path/to/key1.pem /path/to/key2.pem)
+# server :srv1, 'srv1.domain.local', 'root', :keys => keys
+# server :srv2, 'srv2.domain.local', 'root', :keys => keys
+#
 server :sho0, 'sho0.lipsiasoft.biz', 'root', :keys => keys
 server :srv0, 'srv0.lipsiasoft.biz', 'root', :keys => keys
 server :srv1, 'srv1.lipsiasoft.biz', 'root', :keys => keys
 server :srv2, 'srv2.lipsiasoft.biz', 'root', :keys => keys
 
-plugin "configure-server", "https://raw.github.com/gist/112..."
-
-namespace :status do
-
-  desc "Show processes"
-  task :ps do
-    result = run("ps axo pid,rss,pcpu,command --sort -rss", :silent => true).split("\n")
-    result = result.map { |l| l.strip }
-    puts result[0..10]
-    wait
-  end
-end
+##
+# Here my plugins
+#
