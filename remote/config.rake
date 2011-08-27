@@ -1,10 +1,10 @@
 # This file is used to setup RedHat based distribution, like Amazon, Centos or Fedora
 namespace :remote do
+
+  desc "configure a new server"
+  task :conf => [:bash, :motd, :hostname, :sudoers, :timesync, :gemrc, :yum]
+
   namespace :conf do
-
-    desc "configure a new server"
-    task :new => [:bash, :motd, :hostname, :sudoers, :timesync, :gemrc, :yum]
-
     desc "add pretty colors to you bash shell"
     task :bash, :in => :remote do
       tpl = <<-TXT.gsub(/^ {6}/, '')
