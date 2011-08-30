@@ -38,27 +38,18 @@ namespace :remote do
 
     desc "install image magick checking the best choice for your env"
     task :imagemagick, :in => :remote do
-      if exist?('/etc/redhat-release') && read('/etc/redhat-release') =~ /centos/i
-        run "yum install libjpeg-devel libpng-devel glib2-devel fontconfig-devel zlib-devel ghostscript-fonts libwmf-devel freetype-devel libtiff-devel -y"
-        run "wget ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick.tar.gz"
-        run "tar zxzvf ImageMagick.tar.gz"
-        run "cd ImageMagick* && ./configure && make && make install && cd .."
-        run "rm -rf ImageMagick*"
-        run "ln -s /usr/local/bin/stream /usr/bin/stream"
-        run "ln -s /usr/local/bin/montage /usr/bin/montage"
-        run "ln -s /usr/local/bin/mogrify /usr/bin/mogrify"
-        run "ln -s /usr/local/bin/import /usr/bin/import"
-        run "ln -s /usr/local/bin/identify /usr/bin/identify"
-        run "ln -s /usr/local/bin/display /usr/bin/display"
-        run "ln -s /usr/local/bin/convert /usr/bin/convert"
-        run "ln -s /usr/local/bin/conjure /usr/bin/conjure"
-        run "ln -s /usr/local/bin/composite /usr/bin/composite"
-        run "ln -s /usr/local/bin/compare /usr/bin/compare"
-        run "ln -s /usr/local/bin/animate /usr/bin/animate"
-        run "ldconfig /usr/local/lib"
-      else
-        run "yum install ImageMagick-devel -y"
+      run "yum install libjpeg-devel libpng-devel glib2-devel fontconfig-devel zlib-devel ghostscript-fonts libwmf-devel freetype-devel libtiff-devel -y"
+      run "wget ftp://ftp.imagemagick.org/pub/ImageMagick/ImageMagick.tar.gz"
+      run "tar zxzvf ImageMagick.tar.gz"
+      run "cd ImageMagick* && ./configure && make && make install && cd .."
+      run "rm -rf ImageMagick*"
+      %w[stream montage mongrify import identify display convert conjure composite compare animate].each do |bin|
+        run 'rm -rf /usr/bin/%s' % bin
+        run 'ln -s /usr/local/bin/%s /usr/bin/%s' % [bin, bin]
       end
+      run "ldconfig /usr/local/lib"
+      run 'touch /var/spool/cron/root' unless exist?('/var/spool/cron/root')
+      append "@reboot ldconfig /usr/local/lib", '/var/spool/cron/root'
     end
 
     desc "create motd for each server"
