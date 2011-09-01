@@ -1,4 +1,19 @@
 namespace :l do
+  desc 'clone a remote lipsiahosting --name=project_name'
+  task :clone do |args|
+    name = args[:name]
+    unless name
+      log "\e[31mYou must provide --name project_name!\e[0m"
+      exit
+    end
+
+    if File.exist?('./%s' % name)
+      log "\e[31mSorry, the %s already cloned\e[0m" % name
+    end
+
+    sh 'git clone git@lipsiasoft.biz:/%s.git' % name
+  end
+
   desc 'setup a local repository for lipsiahosting'
   task :setup do
     name = File.basename(File.expand_path('.'))
