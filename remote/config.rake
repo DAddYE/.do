@@ -2,7 +2,7 @@
 namespace :remote do
 
   desc "configure a new server"
-  task :conf => [:bash, :motd, :hostname, :sudoers, :timesync, :gemrc, :yum]
+  task :conf => [:bash, :ruby_env, :motd, :hostname, :sudoers, :timesync, :gemrc, :yum]
 
   namespace :conf do
     desc "add pretty colors to you bash shell"
@@ -187,6 +187,14 @@ namespace :remote do
       replace :all, tpl, "/etc/cron.hourly/cleaner"
       run "chmod +x /etc/cron.hourly/cleaner"
       run "service crond restart"
+    end
+
+    desc "configure RACK, RAILS, PADRINO ENV = production"
+    task :ruby_env, :in => :remote do
+      replace 'export RAILS_ENV="production"export RACK_ENV="production"export PADRINO_ENV="production"', '', '/root/.bash_profile'
+      append 'export RAILS_ENV="production"', '/root/.bash_profile'
+      append 'export RACK_ENV="production"', '/root/.bash_profile'
+      append 'export PADRINO_ENV="production"', '/root/.bash_profile'
     end
   end
 end
